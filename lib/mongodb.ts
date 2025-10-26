@@ -31,10 +31,11 @@ if (!global.mongoose) {
 }
 
 /**
- * Establishes a connection to MongoDB using Mongoose.
- * Reuses existing connection if available (cached).
- * 
- * @returns Promise that resolves to the Mongoose instance
+ * Connects to MongoDB and returns a cached Mongoose instance.
+ *
+ * Reuses an existing cached connection when available; on first call it establishes a new connection.
+ *
+ * @returns The connected Mongoose instance
  */
 async function connectDB(): Promise<typeof mongoose> {
   // Return cached connection if it exists
