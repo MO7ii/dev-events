@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 // MongoDB connection string from environment variables
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error(
-    'Please define the MONGODB_URI environment variable inside .env.local'
+    "Please define the MONGODB_URI environment variable inside .env.local"
   );
 }
 
@@ -33,7 +33,7 @@ if (!global.mongoose) {
 /**
  * Establishes a connection to MongoDB using Mongoose.
  * Reuses existing connection if available (cached).
- * 
+ *
  * @returns Promise that resolves to the Mongoose instance
  */
 async function connectDB(): Promise<typeof mongoose> {
@@ -44,13 +44,22 @@ async function connectDB(): Promise<typeof mongoose> {
 
   // If no promise exists, create a new connection
   if (!cached.promise) {
+    // Validate MongoDB URI exists
+    if (!MONGODB_URI) {
+      throw new Error(
+        "Please define the MONGODB_URI environment variable inside .env.local"
+      );
+    }
+
     const opts = {
       bufferCommands: false, // Disable mongoose buffering
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI as string, opts).then((mongoose) => {
-      return mongoose;
-    });
+    cached.promise = mongoose
+      .connect(MONGODB_URI as string, opts)
+      .then((mongoose) => {
+        return mongoose;
+      });
   }
 
   try {
